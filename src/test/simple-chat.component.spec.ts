@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
-import * as io from 'socket.io-client';
 import { SimpleChat } from '../app/simple-chat.component';
 import { ChatService } from '../app/simple-chat.service';
 import { By } from '@angular/platform-browser';
@@ -84,5 +83,22 @@ describe('SimpleChat', () => {
     
     fixture.detectChanges();
     expect(getMsg).to.have.been.called();
+  });
+  
+  it('should get messages from ChatService', () => {
+    fixture = TestBed.createComponent(SimpleChat);
+    comp = fixture.componentInstance;
+    chatService = TestBed.get(ChatService);
+    comp.message = 'Hello Ana';
+    
+    let button = fixture.debugElement.query(By.css('button'));
+    
+    button.triggerEventHandler('click', {});
+    
+    fixture.detectChanges();
+    
+    fixture.whenStable().then(() => {
+      expect(comp.messages).to.have.deep.property('[0].text', 'Hello Ana');
+    });
   });
 })
