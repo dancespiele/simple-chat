@@ -1,0 +1,10 @@
+<div>
+  <input [(ngModel)]='message.user' placeholder="user">
+  <div>
+    <div *ngFor='let msg of messages | async'>
+      <span>{{msg.user}}: {{msg.text}}</span>
+    </div>
+    <input [(ngModel)]='message.text' placeholder="text">
+    <button (click)="sendMsg()">Send</button>
+  </div>
+</div>
