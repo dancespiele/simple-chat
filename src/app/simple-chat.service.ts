@@ -1,27 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Socket } from 'ng-socket-io';
-import 'rxjs/Rx';
-
-import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/operator/map';
+import * as io from 'socket.io-client';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class ChatService {
-  constructor(private socket: Socket) {}
+  private url: string = 'http://localhost:4000';
+  private socket;
+  
+  constructor() {}
 
-  getMessages(){
-    return this.socket
-      .fromEvent('message')
-      .map((data: {user: string, msg: string}) => {
-        const message: {user: string, text: string} = {
-          user: data.user,
-          text: data.msg
-        };
-        return message
+  getMessages() {
+    let observable = new Observable(observer => {
+      this.socket = io(this.url);
+      this.socket.on('message', (data) => {
+        observer.next(data);
       });
+      return () => {
+        this.socket.disconnect();
+      };
+    })
+    return observable
   }
 
-  sendMessage(message: {user: string, text: string}) {
-    this.socket.emit('message', message);
+  sendMessage(message: string): void {
+    this.socket.emit('add-message', message);
   }
 }

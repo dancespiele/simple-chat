@@ -8,8 +8,8 @@ io.on('connection', (socket) => {
     console.log('user disconnect');
   });
 
-  socket.on('add-message', (user, message) => {
-    io.emit('message', {user: user, message});
+  socket.on('add-message', (message) => {
+    io.emit('message', {text: message});
   });
 
 });

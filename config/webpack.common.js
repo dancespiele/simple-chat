@@ -46,7 +46,8 @@ module.exports = {
 
     new HtmlWebpackPlugin({ //Inject scripts and links into index.html
       template: helpers.root('src/index.html')
-    })
+    }),
+    
   ],
   performance: {
     hints: process.env.NODE_ENV === 'production'
